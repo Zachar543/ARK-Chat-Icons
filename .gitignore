@@ -6,5 +6,5 @@ cmake-build-release/
 # VS 2017
 x64/
 .vs/
-*.vcxproj.user
+**/*.vcxproj.user
 
