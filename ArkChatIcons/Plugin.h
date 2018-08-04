@@ -1,17 +1,14 @@
 #pragma once
 
+#include "json.hpp"
+
 #include "Utils.h"
 
 class Plugin {
 public:
-	nlohmann::json config;
-	
 	static Plugin& Get();
 
-	Plugin(const Plugin&) = delete;
-	Plugin(Plugin&&) = delete;
-	Plugin& operator=(const Plugin&) = delete;
-	Plugin& operator=(Plugin&&) = delete;
+	nlohmann::json config;
 
 private:
 	Plugin() = default;

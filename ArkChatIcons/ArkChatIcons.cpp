@@ -1,9 +1,9 @@
 #include <windows.h>
 #include <fstream>
+
 #include <API/ARK/Ark.h>
 #include <API/UE/Math/ColorList.h>
 #include <Logger/Logger.h>
-#include <Permissions.h>
 
 #include "Plugin.h"
 
@@ -56,11 +56,11 @@ void load() {
 
 	loadConfig();
 	
-	ArkApi::GetCommands().AddOnChatMessageCallback("ArkChatIcon::OnChatMessage", &onChatMessage);
+	ArkApi::GetCommands().AddOnChatMessageCallback("ArkChatIcon::onChatMessage", &onChatMessage);
 	ArkApi::GetCommands().AddConsoleCommand("ArkChatIcon.Reload", &reloadConfigCmd);
 }
 void unload() {
-	ArkApi::GetCommands().RemoveOnChatMessageCallback("ArkChatIcon::OnChatMessage");
+	ArkApi::GetCommands().RemoveOnChatMessageCallback("ArkChatIcon::onChatMessage");
 	ArkApi::GetCommands().RemoveConsoleCommand("ArkChatIcon.Reload");
 }
 
