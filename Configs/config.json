@@ -1,0 +1,9 @@
+{
+  "Groups": {
+    "Admins": "/Game/PrimalEarth/UI/Textures/ServerAdminChat_Icon.ServerAdminChat_Icon",
+    "AnotherGroup": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
+  },
+  "SteamIds": {
+    "1234567890": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
+  }
+}
