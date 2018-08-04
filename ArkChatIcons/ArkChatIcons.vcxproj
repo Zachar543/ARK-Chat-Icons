@@ -12,7 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{6249FD5B-5B07-48B0-A2B5-E0CC27D58DCC}</ProjectGuid>
+    <ProjectGuid>{BB7385F7-6EAD-4584-8477-C39B35640D56}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ArkChatIcons</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
