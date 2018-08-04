@@ -78,7 +78,7 @@ bool ShouldPlayerGetMessage(AShooterPlayerController* sender, AShooterPlayerCont
 		FVector senderPos = ArkApi::GetApiUtils().GetPosition(sender);
 		FVector playerPos = ArkApi::GetApiUtils().GetPosition(player);
 		float dist = FVector::Dist(senderPos, playerPos);
-		Log::GetLog()->info("Utils::ShouldPlayerGetMessage(): Dist = {}", std::to_string(dist));
+		Log::GetLog()->debug("Utils::ShouldPlayerGetMessage(): Dist = {}", std::to_string(dist));
 		return (dist <= plugin.localChatDistance);
 	}
 	//else if (sendMode == EChatSendMode::MAX) return true; // TODO: MAX?
