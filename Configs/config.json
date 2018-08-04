@@ -5,5 +5,10 @@
   },
   "SteamIds": {
     "1234567890": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
-  }
+  },
+  "InterceptGlobalChat": true,
+  "InterceptTribeChat": true,
+  "InterceptAllianceChat": true,
+  "InterceptLocalChat": true,
+  "LocalChatDistance": 4000
 }

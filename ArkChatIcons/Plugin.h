@@ -9,6 +9,12 @@ public:
 	static Plugin& Get();
 
 	nlohmann::json config;
+	bool interceptGlobalChat;
+	bool interceptTribeChat;
+	bool interceptAllianceChat;
+	bool interceptLocalChat;
+	float localChatDistance;
+
 	std::map<std::string, UTexture2D*> textureCache;
 
 private:
