@@ -72,11 +72,11 @@ void load() {
 
 	loadConfig();
 	
-	ArkApi::GetCommands().AddOnChatMessageCallback("ArkChatIcon::onChatMessage", &onChatMessage);
+	ArkApi::GetCommands().AddOnChatMessageCallback("ArkChatIcons::onChatMessage", &onChatMessage);
 	ArkApi::GetCommands().AddConsoleCommand("ArkChatIcons.Reload", &reloadConfigCmd);
 }
 void unload() {
-	ArkApi::GetCommands().RemoveOnChatMessageCallback("ArkChatIcon::onChatMessage");
+	ArkApi::GetCommands().RemoveOnChatMessageCallback("ArkChatIcons::onChatMessage");
 	ArkApi::GetCommands().RemoveConsoleCommand("ArkChatIcons.Reload");
 }
 
