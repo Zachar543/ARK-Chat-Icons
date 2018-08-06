@@ -1,5 +1,6 @@
-# DISCLAIMER: Use at your own risk as I have not tested each of these
-# This list contains all content files that have "Icon" in their name with minimal filtering and some may not work or look good
+# DISCLAIMER: Use at your own risk as I have not tested most of these
+# This list contains all content files that have "Icon" in their name with minimal filtering
+# Some of these may not work at all, may not look correct, or may even crash clients after 10-20 minutes of use, so do not test on a live server!
 
 /Game/Aberration/Icons/Armor/Saddles/BasiliskSaddle_Icon.BasiliskSaddle_Icon
 /Game/Aberration/Icons/Armor/Saddles/CaveWolfSaddle_Icon.CaveWolfSaddle_Icon
