@@ -1,7 +1,7 @@
 {
   "Groups": {
     "Admins": "/Game/PrimalEarth/UI/Textures/ServerAdminChat_Icon.ServerAdminChat_Icon",
-    "AnotherGroup": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
+    "AnotherGroup": "/Game/PrimalEarth/CoreBlueprints/StatusIcons/Mating_Icon.Mating_Icon"
   },
   "TribeIds": {
 	"123456790": {
@@ -10,7 +10,7 @@
     }
   },
   "SteamIds": {
-    "1234567890": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
+    "1234567890": "/Game/Aberration/Icons/Resources/Gem3_Icon.Gem3_Icon"
   },
   "InterceptGlobalChat": true,
   "InterceptTribeChat": true,
