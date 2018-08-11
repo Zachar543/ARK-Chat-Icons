@@ -48,11 +48,53 @@ void loadConfig() {
 		file >> plugin.config;
 		file.close();
 
+		Log::GetLog()->set_level(spdlog::level::info);
+		if (plugin.config.value("Debug", false))
+			Log::GetLog()->set_level(spdlog::level::debug);
+
 		plugin.interceptGlobalChat = plugin.config.value("InterceptGlobalChat", true);
 		plugin.interceptTribeChat = plugin.config.value("InterceptTribeChat", true);
 		plugin.interceptAllianceChat = plugin.config.value("InterceptAllianceChat", true);
 		plugin.interceptLocalChat = plugin.config.value("InterceptLocalChat", true);
+
+		plugin.logGlobalChat = plugin.config.value("LogGlobalChat", true);
+		plugin.logTribeChat = plugin.config.value("LogTribeChat", true);
+		plugin.logAllianceChat = plugin.config.value("LogAllianceChat", true);
+		plugin.logLocalChat = plugin.config.value("LogLocalChat", true);
+
 		plugin.localChatDistance = plugin.config.value("LocalChatDistance", 1000);
+
+		plugin.steamIdIconMap.clear();
+		auto steamIds = plugin.config.value("SteamIds", nlohmann::json::object());
+		for (auto it = steamIds.begin(); it != steamIds.end(); ++it) {
+			uint64 key = std::stoll(it.key());
+			std::string value = it.value().get<std::string>();
+			plugin.steamIdIconMap.insert(std::pair<uint64, std::string>(key, value));
+
+			Log::GetLog()->debug("[Config::SteamIds] {}={}", key, value);
+		}
+
+		plugin.tribeIconMap.clear();
+		auto tribeIds = plugin.config.value("TribeIds", nlohmann::json::object());
+		for (auto it = tribeIds.begin(); it != tribeIds.end(); ++it) {
+			uint64 key = std::stoll(it.key());
+			auto value = it.value().get<std::map<std::string, std::string>>();
+			plugin.tribeIconMap.insert(std::pair<uint64, std::map<std::string, std::string>>(key, value));
+
+			for (auto tribeRank : value) {
+				Log::GetLog()->debug("[Config::TribeIds] <{}> {}={}", key, tribeRank.first, tribeRank.second);
+			}
+		}
+
+		plugin.permGroupIconMap.clear();
+		auto groups = plugin.config.value("Groups", nlohmann::json::object());
+		for (auto it = groups.begin(); it != groups.end(); ++it) {
+			std::string key = it.key();
+			std::string value = it.value().get<std::string>();
+			plugin.permGroupIconMap.insert(std::pair<std::string, std::string>(key, value));
+
+			Log::GetLog()->debug("[Config::Groups] {}={}", key, value);
+		}
 	}
 	catch (const std::exception& error) {
 		Log::GetLog()->error(error.what());

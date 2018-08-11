@@ -3,6 +3,12 @@
     "Admins": "/Game/PrimalEarth/UI/Textures/ServerAdminChat_Icon.ServerAdminChat_Icon",
     "AnotherGroup": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
   },
+  "TribeIds": {
+	"123456790": {
+	  "SomeTribeRank1": "/Game/PrimalEarth/UI/Textures/WildcardAdminChat_Icon.WildcardAdminChat_Icon",
+	  "SomeTribeRank2": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
+    }
+  },
   "SteamIds": {
     "1234567890": "/Game/PrimalEarth/UI/Textures/StatsIcons/Fortitude_Icon.Fortitude_Icon"
   },
@@ -10,5 +16,10 @@
   "InterceptTribeChat": true,
   "InterceptAllianceChat": true,
   "InterceptLocalChat": true,
-  "LocalChatDistance": 4000
+  "LogGlobalChat": true,
+  "LogTribeChat": true,
+  "LogAllianceChat": true,
+  "LogLocalChat": true,
+  "LocalChatDistance": 4000,
+  "Debug": false
 }

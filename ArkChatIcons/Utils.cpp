@@ -6,13 +6,7 @@
 #include "Plugin.h"
 
 void SendChatMessageToAll(AShooterPlayerController* playerController, EChatSendMode::Type messageType, FString &message, UTexture2D *icon) {
-	unsigned int senderId;
-	if (playerController) {
-		AShooterCharacter* playerCharacter = playerController->GetPlayerCharacter();
-		if (playerCharacter)
-			senderId = playerCharacter->LinkedPlayerDataIDField();
-	}
-
+	uint64 characterId = ArkApi::IApiUtils::GetPlayerID(playerController);
 	FString characterName = ArkApi::IApiUtils::GetCharacterName(playerController);
 	FString steamName = ArkApi::IApiUtils::GetSteamName(playerController);
 	FString tribeName = GetTribeName(playerController);
@@ -20,7 +14,7 @@ void SendChatMessageToAll(AShooterPlayerController* playerController, EChatSendM
 
 	SendChatMessageToAll(
 		playerController,
-		senderId,
+		characterId,
 		characterName,
 		steamName,
 		tribeName,
@@ -29,9 +23,11 @@ void SendChatMessageToAll(AShooterPlayerController* playerController, EChatSendM
 		icon,
 		senderTeamIndex);
 }
-void SendChatMessageToAll(AShooterPlayerController* playerController, unsigned int senderId, FString &characterName, FString &steamName, FString &tribeName, EChatSendMode::Type sendMode, FString &message, UTexture2D *icon, int senderTeamIndex) {
+void SendChatMessageToAll(AShooterPlayerController* playerController, unsigned int characterId, FString &characterName, FString &steamName, FString &tribeName, EChatSendMode::Type sendMode, FString &message, UTexture2D *icon, int senderTeamIndex) {
+	auto& plugin = Plugin::Get();
+
 	FChatMessage chatMessage = FChatMessage();
-	chatMessage.SenderId = senderId;
+	chatMessage.SenderId = characterId;
 	chatMessage.SenderName = characterName;
 	chatMessage.SenderSteamName = steamName;
 	chatMessage.SenderTribeName = tribeName;
@@ -41,9 +37,14 @@ void SendChatMessageToAll(AShooterPlayerController* playerController, unsigned i
 	chatMessage.SenderIcon = icon;
 	chatMessage.SenderTeamIndex = senderTeamIndex;
 
-	FString logMessage = FString::Format("{0} ({1}): {2}", steamName.ToString(), characterName.ToString(), message.ToString());
-	ArkApi::GetApiUtils().GetShooterGameMode()->PrintToServerGameLog(&logMessage, false);
-
+	if ((sendMode == EChatSendMode::GlobalChat && plugin.logGlobalChat) ||
+		(sendMode == EChatSendMode::GlobalTribeChat && plugin.logTribeChat) || 
+		(sendMode == EChatSendMode::AllianceChat && plugin.logAllianceChat) || 
+		(sendMode == EChatSendMode::LocalChat && plugin.logLocalChat)) {
+		FString logMessage = FString::Format("{0} ({1}): {2}", steamName.ToString(), characterName.ToString(), message.ToString());
+		ArkApi::GetApiUtils().GetShooterGameMode()->PrintToServerGameLog(&logMessage, false);
+	}
+	
 	const TArray<TAutoWeakObjectPtr<APlayerController>>& playerControllers = ArkApi::GetApiUtils().GetWorld()->PlayerControllerListField();
 	for (TWeakObjectPtr<APlayerController> otherPlayerController : playerControllers) {
 		AShooterPlayerController* shooterPlayerController = static_cast<AShooterPlayerController*>(otherPlayerController.Get());
@@ -131,6 +132,28 @@ int GetTribeId(AShooterPlayerController* playerController) {
 
 	return -1;
 }
+FString GetTribeRank(AShooterPlayerController* playerController) {
+	auto playerState = reinterpret_cast<AShooterPlayerState*>(playerController->PlayerStateField());
+	if (playerState) {
+		auto tribe = playerState->MyTribeDataField();
+		if (tribe) {
+			uint64 playerId = ArkApi::IApiUtils::GetPlayerID(playerController);
+
+			auto tribeRanks = tribe->TribeRankGroupsField();
+			if (tribeRanks.Num() > 0) {
+				auto tribeRank = tribeRanks[0];
+
+				FTribeRankGroup outRank(tribeRank);
+				bool result = tribe->GetTribeRankGroupForPlayer(playerId, &outRank);
+
+				Log::GetLog()->debug("Utils::GetTribeRank() -> result={} outRank={}", std::to_string(result), outRank.RankGroupName.ToString());
+				return outRank.RankGroupName;
+			}
+		}
+	}
+
+	return FString("");
+}
 TArray<FTribeAlliance> GetTribeAlliances(AShooterPlayerController* playerController) {
 	auto playerState = reinterpret_cast<AShooterPlayerState*>(playerController->PlayerStateField());
 	if (playerState) {
@@ -156,7 +179,6 @@ UTexture2D* loadTexture2D(const std::string path) {
 	Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Miss", path.c_str());
 	plugin.textureCache.insert(std::pair<std::string, UTexture2D*>(path, result));
 
-
 	return result;
 }
 UTexture2D* findIconByPath(const std::string path) {
@@ -168,23 +190,34 @@ UTexture2D* findIconByPath(const std::string path) {
 std::string findIconForPlayer(AShooterPlayerController* playerController) {
 	auto& plugin = Plugin::Get();
 
-	const uint64 steamId = ArkApi::GetApiUtils().GetSteamIdFromController(playerController);
-	const std::string steamIdStr = std::to_string(steamId);
+	const uint64 steamId = ArkApi::IApiUtils::GetSteamIdFromController(playerController);
+	const uint64 tribeId = GetTribeId(playerController);
+	const std::string tribeRank = GetTribeRank(playerController).ToString();
 
-	Log::GetLog()->debug("Utils::findIconForPlayer() -> steamIdStr: {}", steamIdStr);
+	// Check Steam Id
+	Log::GetLog()->debug("Utils::findIconForPlayer() -> steamIdStr={}", steamId);
+	auto steamIdIter = plugin.steamIdIconMap.find(steamId);
+	if (steamIdIter != plugin.steamIdIconMap.end()) {
+		return steamIdIter->second;
+	}
 
-	auto steamIds = plugin.config.value("SteamIds", nlohmann::json::object());
-	std::string steamIdPath = steamIds.value(steamIdStr, "");
-	if (steamIdPath.length() > 0)
-		return steamIdPath;
+	// Check Tribe Id
+	Log::GetLog()->debug("Utils::findIconForPlayer() -> tribeId={} tribeRank={}", tribeId, tribeRank);
+	auto tribeIdIter = plugin.tribeIconMap.find(tribeId);
+	if (tribeIdIter != plugin.tribeIconMap.end()) {
+		auto tribeRankIter = tribeIdIter->second.find(tribeRank);
+		if (tribeRankIter != tribeIdIter->second.end()) {
+			return tribeRankIter->second;
+		}
+	}
 
-	auto groups = plugin.config.value("Groups", nlohmann::json::object());
+	// Check Permission Groups
 	for (FString group : Permissions::GetPlayerGroups(steamId)) {
-		Log::GetLog()->debug("Utils::findIconForPlayer() -> group: {}", group.ToString());
-
-		std::string path = groups.value(group.ToString(), "");
-		if (path.length() > 0)
-			return path;
+		Log::GetLog()->debug("Utils::findIconForPlayer() -> group={}", group.ToString());
+		auto groupIter = plugin.permGroupIconMap.find(group.ToString());
+		if (groupIter != plugin.permGroupIconMap.end()) {
+			return groupIter->second;
+		}
 	}
 
 	return "";

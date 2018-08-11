@@ -2,7 +2,8 @@
 
 #include <sstream>
 
-#include "API/Ark/Ark.h"
+#include <API/ARK/Ark.h>
+#include <API/UE/UE.h>
 
 void SendChatMessageToAll(AShooterPlayerController* playerController, EChatSendMode::Type messageType, FString &message, UTexture2D *icon);
 void SendChatMessageToAll(AShooterPlayerController* playerController, unsigned int senderId, FString &characterName, FString &steamName, FString &tribeName, EChatSendMode::Type sendMode, FString &message, UTexture2D *icon, int senderTeamIndex);
