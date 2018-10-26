@@ -23,7 +23,10 @@ Allows changing player chat icons by group or steam id
 
 ### Notes
 * Only icons that exist within ARK or from Mods can be used.
-* Values in the SteamIds list take priority over the Groups list if a player is matched in both sections.
+* If a player is matched against multiple icon entries (e.g. Group and SteamId), the first entry matched in this order will be used:
+  * Steam Id
+  * Tribe Id (and rank)
+  * Permission Group
 * Removing the "Admins" key from the Groups section will disable the default ServerAdmin tag. Similarly, specifying a different icon for "Admins" will override the default ServerAdmin tag.
 
 ### Console Commands
