@@ -9,15 +9,6 @@ public:
 	static Plugin& Get();
 
 	nlohmann::json config;
-	bool interceptGlobalChat;
-	bool interceptTribeChat;
-	bool interceptAllianceChat;
-	bool interceptLocalChat;
-	bool logGlobalChat;
-	bool logTribeChat;
-	bool logAllianceChat;
-	bool logLocalChat;
-	float localChatDistance;
 
 	std::map<uint64, std::string> steamIdIconMap;
 	std::map<uint64, std::map<std::string, std::string>> tribeIconMap;

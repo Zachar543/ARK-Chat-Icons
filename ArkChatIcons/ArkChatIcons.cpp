@@ -10,28 +10,13 @@
 #pragma comment(lib, "ArkApi.lib")
 #pragma comment(lib, "Permissions.lib")
 
-bool onChatMessage(AShooterPlayerController* playerController, FString* message, EChatSendMode::Type sendMode, bool spam, bool command) {
-	if (spam || command) return false;
-
-	auto& plugin = Plugin::Get();
-
-	// Disable handling of a few SendModes
-	if (sendMode == EChatSendMode::MAX) return false;
-
-	if (sendMode == EChatSendMode::GlobalChat && !plugin.interceptGlobalChat) return false;
-	if (sendMode == EChatSendMode::GlobalTribeChat && !plugin.interceptTribeChat) return false;
-	if (sendMode == EChatSendMode::AllianceChat && !plugin.interceptAllianceChat) return false;
-	if (sendMode == EChatSendMode::LocalChat && !plugin.interceptLocalChat) return false;
-
-	if (playerController && message) {
-		auto icon = findIconByPath(findIconForPlayer(playerController));
-
-		SendChatMessageToAll(playerController, sendMode, *message, icon);
-		
-		return true;
+DECLARE_HOOK(AShooterPlayerController_ClientChatMessage, void, AShooterPlayerController*, FChatMessage);
+void Hook_AShooterPlayerController_ClientChatMessage(AShooterPlayerController* _this, FChatMessage msg) {
+	if (_this) {
+		msg.SenderIcon = findIconByPath(findIconForPlayer(_this));
 	}
-	
-	return false;
+
+	AShooterPlayerController_ClientChatMessage_original(_this, msg);
 }
 
 void loadConfig() {
@@ -51,18 +36,6 @@ void loadConfig() {
 		Log::GetLog()->set_level(spdlog::level::info);
 		if (plugin.config.value("Debug", false))
 			Log::GetLog()->set_level(spdlog::level::debug);
-
-		plugin.interceptGlobalChat = plugin.config.value("InterceptGlobalChat", true);
-		plugin.interceptTribeChat = plugin.config.value("InterceptTribeChat", true);
-		plugin.interceptAllianceChat = plugin.config.value("InterceptAllianceChat", true);
-		plugin.interceptLocalChat = plugin.config.value("InterceptLocalChat", true);
-
-		plugin.logGlobalChat = plugin.config.value("LogGlobalChat", true);
-		plugin.logTribeChat = plugin.config.value("LogTribeChat", true);
-		plugin.logAllianceChat = plugin.config.value("LogAllianceChat", true);
-		plugin.logLocalChat = plugin.config.value("LogLocalChat", true);
-
-		plugin.localChatDistance = plugin.config.value("LocalChatDistance", 1000);
 
 		plugin.steamIdIconMap.clear();
 		auto steamIds = plugin.config.value("SteamIds", nlohmann::json::object());
@@ -113,12 +86,12 @@ void load() {
 	Log::Get().Init("ArkChatIcons");
 
 	loadConfig();
-	
-	ArkApi::GetCommands().AddOnChatMessageCallback("ArkChatIcons::onChatMessage", &onChatMessage);
+
+	ArkApi::GetHooks().SetHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage, &AShooterPlayerController_ClientChatMessage_original);
 	ArkApi::GetCommands().AddConsoleCommand("ArkChatIcons.Reload", &reloadConfigCmd);
 }
 void unload() {
-	ArkApi::GetCommands().RemoveOnChatMessageCallback("ArkChatIcons::onChatMessage");
+	ArkApi::GetHooks().DisableHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage);
 	ArkApi::GetCommands().RemoveConsoleCommand("ArkChatIcons.Reload");
 }
 

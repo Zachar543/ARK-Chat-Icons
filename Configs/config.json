@@ -12,14 +12,5 @@
   "SteamIds": {
     "1234567890": "/Game/Aberration/Icons/Resources/Gem3_Icon.Gem3_Icon"
   },
-  "InterceptGlobalChat": true,
-  "InterceptTribeChat": true,
-  "InterceptAllianceChat": true,
-  "InterceptLocalChat": true,
-  "LogGlobalChat": true,
-  "LogTribeChat": true,
-  "LogAllianceChat": true,
-  "LogLocalChat": true,
-  "LocalChatDistance": 4000,
   "Debug": false
 }
