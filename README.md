@@ -17,15 +17,6 @@ Allows changing player chat icons by group or steam id
   "SteamIds": {
     "1234567890": "/Game/Aberration/Icons/Resources/Gem3_Icon.Gem3_Icon"
   },
-  "InterceptGlobalChat": true, // Setting to false will use default ARK Global Chat behavior
-  "InterceptTribeChat": true, // Setting to false will use default ARK Tribe Chat behavior
-  "InterceptAllianceChat": true, // Setting to false will use default ARK Alliance Chat behavior
-  "InterceptLocalChat": true, // Setting to false will use default ARK Local Chat behavior
-  "LogGlobalChat": true, // Setting to true will log Global Chat to both RCON (getgamelog) and Console
-  "LogTribeChat": true, // Setting to true will log Tribe Chat to both RCON (getgamelog) and Console
-  "LogAllianceChat": true, // Setting to true will log Alliance Chat to both RCON (getgamelog) and Console
-  "LogLocalChat": true, // Setting to true will log Local Chat to both RCON (getgamelog) and Console
-  "LocalChatDistance": 4000, // Max distance to show local chat between players. 4000 appears to be close to Vanilla.
   "Debug": false // Settting to true will print debug messages. You probably don't need or care about this.
 }
 ```
