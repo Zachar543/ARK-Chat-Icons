@@ -10,4 +10,4 @@ FString GetTribeRank(AShooterPlayerController* playerController);
 
 UTexture2D* loadTexture2D(const std::string path);
 UTexture2D* findIconByPath(const std::string path);
-std::string findIconForPlayer(AShooterPlayerController* playerController);
+std::string findIconForMessage(FChatMessage msg);

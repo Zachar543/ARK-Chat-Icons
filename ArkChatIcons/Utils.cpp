@@ -60,12 +60,20 @@ UTexture2D* findIconByPath(const std::string path) {
 	Log::GetLog()->debug("Utils::findIconByPath(\"{}\")", path.c_str());
 	return loadTexture2D(path);
 }
-std::string findIconForPlayer(AShooterPlayerController* playerController) {
+std::string findIconForMessage(FChatMessage msg) {
 	auto& plugin = Plugin::Get();
 
-	const uint64 steamId = ArkApi::IApiUtils::GetSteamIdFromController(playerController);
-	const uint64 tribeId = GetTribeId(playerController);
-	const std::string tribeRank = GetTribeRank(playerController).ToString();
+	auto senderId = msg.SenderId;
+	if (!senderId) return "";
+
+	const uint64 steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
+	if (!steamId) return "";
+
+	AShooterPlayerController* player = ArkApi::GetApiUtils().FindPlayerFromSteamId(steamId);
+	if (!player) return "";
+
+	const uint64 tribeId = GetTribeId(player);
+	const std::string tribeRank = GetTribeRank(player).ToString();
 
 	// Check Steam Id
 	Log::GetLog()->debug("Utils::findIconForPlayer() -> steamIdStr={}", steamId);
