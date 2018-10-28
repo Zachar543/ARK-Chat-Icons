@@ -1,6 +1,6 @@
 {
   "FullName":"ARK Chat Icons",
   "Description":"Allows changing player chat icons by group or steam id",
-  "Version":1.03,
-  "MinApiVersion":2.3
+  "Version":1.04,
+  "MinApiVersion":2.6
 }
