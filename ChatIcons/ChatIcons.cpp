@@ -102,7 +102,7 @@ void load() {
 	ArkApi::GetCommands().AddConsoleCommand("ChatIcons.Reload", &reloadConfigCmd);
 }
 void unload() {
-	ArkApi::GetHooks().DisableHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage);
+ 	ArkApi::GetHooks().DisableHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage);
 	ArkApi::GetCommands().RemoveConsoleCommand("ChatIcons.Reload");
 }
 
