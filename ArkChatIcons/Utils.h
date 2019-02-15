@@ -2,7 +2,14 @@
 
 #include <sstream>
 
+#ifdef ARKAPI_GAME_ARK
 #include <API/ARK/Ark.h>
+#include <ArkPermissions.h>
+#else
+#include <API/Atlas/Atlas.h>
+#include <AtlasPermissions.h>
+#endif
+
 #include <API/UE/UE.h>
 
 int GetTribeId(AShooterPlayerController* playerController);

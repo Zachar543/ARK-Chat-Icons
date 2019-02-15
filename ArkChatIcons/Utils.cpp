@@ -1,9 +1,20 @@
 #include "Utils.h"
 
-#include <Logger/Logger.h>
-#include <Permissions.h>
-
 #include "Plugin.h"
+
+FString getRankForPlayer(FTribeData* tribe, uint64 playerId, const TArray<FTribeRankGroup>::ElementType& tribeRank) {
+	FTribeRankGroup outRank(tribeRank);
+	bool result = tribe->GetTribeRankGroupForPlayer(playerId, &outRank);
+
+#ifdef ARKAPI_GAME_ARK
+	FString rankGroupName = outRank.RankGroupName;
+#else
+	FString rankGroupName = outRank.RankGroupNameField();
+#endif
+
+	Log::GetLog()->debug("Utils::GetTribeRank() -> result={} outRank={}", std::to_string(result), rankGroupName.ToString());
+	return rankGroupName;
+}
 
 int GetTribeId(AShooterPlayerController* playerController) {
 	auto playerState = reinterpret_cast<AShooterPlayerState*>(playerController->PlayerStateField());
@@ -15,22 +26,19 @@ int GetTribeId(AShooterPlayerController* playerController) {
 
 	return -1;
 }
+
+FString getRankForPlayer(const TArray<FTribeRankGroup>::ElementType& player_id, uint64 tribe, FTribeData* out_rank, FTribeRankGroup* tribe_rank_group);
+
 FString GetTribeRank(AShooterPlayerController* playerController) {
 	auto playerState = reinterpret_cast<AShooterPlayerState*>(playerController->PlayerStateField());
 	if (playerState) {
 		auto tribe = playerState->MyTribeDataField();
 		if (tribe) {
 			uint64 playerId = ArkApi::IApiUtils::GetPlayerID(playerController);
-
 			auto tribeRanks = tribe->TribeRankGroupsField();
 			if (tribeRanks.Num() > 0) {
 				auto tribeRank = tribeRanks[0];
-
-				FTribeRankGroup outRank(tribeRank);
-				bool result = tribe->GetTribeRankGroupForPlayer(playerId, &outRank);
-
-				Log::GetLog()->debug("Utils::GetTribeRank() -> result={} outRank={}", std::to_string(result), outRank.RankGroupName.ToString());
-				return outRank.RankGroupName;
+				return getRankForPlayer(tribe, playerId, tribeRank);
 			}
 		}
 	}

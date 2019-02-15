@@ -1,13 +1,22 @@
 #include <windows.h>
 #include <fstream>
 
+#ifdef ARKAPI_GAME_ARK
 #include <API/ARK/Ark.h>
+#else
+#include <API/Atlas/Atlas.h>
+#endif
+
 #include <API/UE/Math/ColorList.h>
 #include <Logger/Logger.h>
-
 #include "Plugin.h"
 
+#ifdef ARKAPI_GAME_ARK
 #pragma comment(lib, "ArkApi.lib")
+#else
+#pragma comment(lib, "AtlasApi.lib")
+#endif
+
 #pragma comment(lib, "Permissions.lib")
 
 DECLARE_HOOK(AShooterPlayerController_ClientChatMessage, void, AShooterPlayerController*, FChatMessage);
