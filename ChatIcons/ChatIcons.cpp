@@ -30,7 +30,11 @@ void loadConfig() {
 	auto& plugin = Plugin::Get();
 
 	try {
-		const std::string path = ArkApi::Tools::GetCurrentDir() + "/ArkApi/Plugins/ArkChatIcons/config.json";
+#ifdef ARKAPI_GAME_ARK
+		const std::string path = ArkApi::Tools::GetCurrentDir() + "/ArkApi/Plugins/ChatIcons/config.json";
+#else
+		const std::string path = ArkApi::Tools::GetCurrentDir() + "/AtlasApi/Plugins/ChatIcons/config.json";
+#endif
 
 		std::ifstream file{ path };
 		if (!file.is_open()) {
@@ -90,16 +94,16 @@ void reloadConfigCmd(APlayerController* playerController, FString*, bool) {
 }
 
 void load() {
-	Log::Get().Init("ArkChatIcons");
+	Log::Get().Init("ChatIcons");
 
 	loadConfig();
 
 	ArkApi::GetHooks().SetHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage, &AShooterPlayerController_ClientChatMessage_original);
-	ArkApi::GetCommands().AddConsoleCommand("ArkChatIcons.Reload", &reloadConfigCmd);
+	ArkApi::GetCommands().AddConsoleCommand("ChatIcons.Reload", &reloadConfigCmd);
 }
 void unload() {
 	ArkApi::GetHooks().DisableHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage);
-	ArkApi::GetCommands().RemoveConsoleCommand("ArkChatIcons.Reload");
+	ArkApi::GetCommands().RemoveConsoleCommand("ChatIcons.Reload");
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD event, LPVOID lpReserved) {

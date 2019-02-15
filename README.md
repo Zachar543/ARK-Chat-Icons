@@ -1,4 +1,4 @@
-# ARK Chat Icons
+# Chat Icons
 Allows changing player chat icons by group or steam id
 
 ### Example Configuration
@@ -30,4 +30,4 @@ Allows changing player chat icons by group or steam id
 * Removing the "Admins" key from the Groups section will disable the default ServerAdmin tag. Similarly, specifying a different icon for "Admins" will override the default ServerAdmin tag.
 
 ### Console Commands
-* ArkChatIcons.Reload - Reloads the config
+* ChatIcons.Reload - Reloads the config
