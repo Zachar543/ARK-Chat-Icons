@@ -9,15 +9,12 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ark|x64 = Ark|x64
 		Atlas|x64 = Atlas|x64
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Ark|x64.ActiveCfg = Ark|x64
 		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Ark|x64.Build.0 = Ark|x64
 		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Atlas|x64.ActiveCfg = Atlas|x64
 		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Atlas|x64.Build.0 = Atlas|x64
-		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Release|x64.ActiveCfg = Release|x64
-		{BB7385F7-6EAD-4584-8477-C39B35640D56}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
