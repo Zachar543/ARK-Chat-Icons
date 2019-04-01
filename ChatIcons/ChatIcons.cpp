@@ -24,7 +24,9 @@ void Hook_AShooterPlayerController_ClientChatMessage(AShooterPlayerController* _
 	auto icon = findIconByPath(findIconForMessage(msg));
 	if (icon )
 	msg.SenderIcon = icon;
-
+	else
+	msg.SenderIcon = NULL;
+	
 	AShooterPlayerController_ClientChatMessage_original(_this, msg);
 }
 
