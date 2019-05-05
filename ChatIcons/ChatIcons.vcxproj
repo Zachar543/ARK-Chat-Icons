@@ -47,13 +47,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Atlas|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\ARK-Server-API\version\Core\Public;$(SolutionDir)..\ARK-Server-Plugins\Permissions\Permissions\Public;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\_libs\Atlas\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\..\ARK-Server-API\version\Core\Public;$(SolutionDir)..\..\ARK-Server-Plugins\Permissions\Permissions\Public;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\_libs\Atlas\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Ark|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\ARK-Server-API\version\Core\Public;$(SolutionDir)..\ARK-Server-Plugins\Permissions\Permissions\Public;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\_libs\Ark\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\..\ARK-Server-API\version\Core\Public;$(SolutionDir)..\..\ARK-Server-Plugins\Permissions\Permissions\Public;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\_libs\Ark\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Atlas|x64'">
     <ClCompile>

@@ -22,7 +22,6 @@
 DECLARE_HOOK(AShooterPlayerController_ClientChatMessage, void, AShooterPlayerController*, FChatMessage);
 void Hook_AShooterPlayerController_ClientChatMessage(AShooterPlayerController* _this, FChatMessage msg) {
 	auto icon = findIconByPath(findIconForMessage(msg));
-	if (icon )
 	msg.SenderIcon = icon;
 
 	AShooterPlayerController_ClientChatMessage_original(_this, msg);
@@ -45,6 +44,8 @@ void loadConfig() {
 
 		file >> plugin.config;
 		file.close();
+
+		plugin.textureCache.clear();
 
 		Log::GetLog()->set_level(spdlog::level::info);
 		if (plugin.config.value("Debug", false))

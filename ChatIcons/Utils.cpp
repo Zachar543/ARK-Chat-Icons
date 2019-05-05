@@ -58,7 +58,7 @@ UTexture2D* loadTexture2D(const std::string path) {
 	auto result = reinterpret_cast<UTexture2D*>(Globals::StaticLoadObject(UTexture2D::StaticClass(), nullptr, ArkApi::Tools::ConvertToWideStr(path).c_str(), nullptr, 0, 0, true));
 
 	Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Miss", path.c_str());
-	plugin.textureCache.insert(std::pair<std::string, UTexture2D*>(path, result));
+	// plugin.textureCache.insert(std::pair<std::string, UTexture2D*>(path, result));
 
 	return result;
 }
@@ -74,7 +74,9 @@ std::string findIconForMessage(FChatMessage msg) {
 	auto senderId = msg.SenderId;
 	if (!senderId) return "";
 
-	const uint64 steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
+	uint64 steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
+	if (!steamId)
+		steamId = senderId;
 	if (!steamId) return "";
 
 	AShooterPlayerController* player = ArkApi::GetApiUtils().FindPlayerFromSteamId(steamId);
