@@ -1,6 +1,7 @@
 #include "Utils.h"
 
 #include "Plugin.h"
+#include <API/ARK/Ark.h>
 
 FString getRankForPlayer(FTribeData* tribe, uint64 playerId, const TArray<FTribeRankGroup>::ElementType& tribeRank) {
 	FTribeRankGroup outRank(tribeRank);
@@ -71,12 +72,24 @@ UTexture2D* findIconByPath(const std::string path) {
 std::string findIconForMessage(FChatMessage msg) {
 	auto& plugin = Plugin::Get();
 
-	auto senderId = msg.SenderId;
-	if (!senderId) return "";
+	// Log::GetLog()->debug("SenderName: {}", msg.SenderName.ToString());
+	// Log::GetLog()->debug("SenderSteamName: {}", msg.SenderSteamName.ToString());
+	// Log::GetLog()->debug("SenderTribeName: {}", msg.SenderTribeName.ToString());
+	// Log::GetLog()->debug("SenderId: {}", std::to_string(msg.SenderId));
+	// Log::GetLog()->debug("UserId: {}", msg.UserId.ToString());
+	// Log::GetLog()->debug("Message: {}", msg.Message.ToString());
 
-	uint64 steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
-	if (!steamId)
-		steamId = senderId;
+	uint64 steamId;
+	auto senderId = msg.SenderId;
+	Log::GetLog()->debug("senderId={}", std::to_string(senderId));
+	if (!senderId) {
+		steamId = std::stoull(msg.UserId.ToString());
+	}
+	else {
+		steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
+	}
+
+	Log::GetLog()->debug("steamId={}", std::to_string(steamId));
 	if (!steamId) return "";
 
 	AShooterPlayerController* player = ArkApi::GetApiUtils().FindPlayerFromSteamId(steamId);
