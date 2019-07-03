@@ -14,8 +14,6 @@ public:
 	std::map<uint64, std::map<std::string, std::string>> tribeIconMap;
 	std::map<std::string, std::string> permGroupIconMap;
 
-	std::map<std::string, UTexture2D*> textureCache;
-
 private:
 	Plugin() = default;
 	~Plugin() = default;

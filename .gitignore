@@ -10,3 +10,5 @@ packages/
 *.vcxproj.*
 *.sln.DotSettings.*
 
+codealike.json
+

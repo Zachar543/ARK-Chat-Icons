@@ -1,6 +1,7 @@
 #include "Utils.h"
 
 #include "Plugin.h"
+#include <API/ARK/Ark.h>
 
 FString getRankForPlayer(FTribeData* tribe, uint64 playerId, const TArray<FTribeRankGroup>::ElementType& tribeRank) {
 	FTribeRankGroup outRank(tribeRank);
@@ -49,18 +50,7 @@ FString GetTribeRank(AShooterPlayerController* playerController) {
 UTexture2D* loadTexture2D(const std::string path) {
 	auto& plugin = Plugin::Get();
 
-	auto iter = plugin.textureCache.find(path);
-	if (iter != plugin.textureCache.end()) {
-		Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Hit", path.c_str());
-		return iter->second;
-	}
-
-	auto result = reinterpret_cast<UTexture2D*>(Globals::StaticLoadObject(UTexture2D::StaticClass(), nullptr, ArkApi::Tools::ConvertToWideStr(path).c_str(), nullptr, 0, 0, true));
-
-	Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Miss", path.c_str());
-	plugin.textureCache.insert(std::pair<std::string, UTexture2D*>(path, result));
-
-	return result;
+	return reinterpret_cast<UTexture2D*>(Globals::StaticLoadObject(UTexture2D::StaticClass(), nullptr, ArkApi::Tools::ConvertToWideStr(path).c_str(), nullptr, 0, 0, true));
 }
 UTexture2D* findIconByPath(const std::string path) {
 	if (path.length() == 0) return NULL;
