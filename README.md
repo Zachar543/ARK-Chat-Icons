@@ -31,3 +31,5 @@ Allows changing player chat icons by group or steam id
 
 ### Console Commands
 * ChatIcons.Reload - Reloads the config
+### RCON Commands
+* ChatIcons.Reload - Reloads the config

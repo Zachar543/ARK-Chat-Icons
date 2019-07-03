@@ -21,8 +21,7 @@
 
 DECLARE_HOOK(AShooterPlayerController_ClientChatMessage, void, AShooterPlayerController*, FChatMessage);
 void Hook_AShooterPlayerController_ClientChatMessage(AShooterPlayerController* _this, FChatMessage msg) {
-	auto icon = findIconByPath(findIconForMessage(msg));
-	msg.SenderIcon = icon;
+	msg.SenderIcon = findIconByPath(findIconForMessage(msg));
 
 	AShooterPlayerController_ClientChatMessage_original(_this, msg);
 }
@@ -86,12 +85,17 @@ void loadConfig() {
 		throw;
 	}
 }
-void reloadConfigCmd(APlayerController* playerController, FString*, bool) {
-	AShooterPlayerController* shooterPlayer = static_cast<AShooterPlayerController*>(playerController);
-
+void reloadConfigConsoleCmd(APlayerController* playerController, FString*, bool) {
 	loadConfig();
 
+	AShooterPlayerController* shooterPlayer = static_cast<AShooterPlayerController*>(playerController);
 	ArkApi::GetApiUtils().SendServerMessage(shooterPlayer, FColorList::Green, "Reloaded config");
+}
+void reloadConfigRconCmd(RCONClientConnection* conn, RCONPacket* packet, UWorld* world) {
+	loadConfig();
+
+	FString response = "Reloaded config";
+	conn->SendMessageW(packet->Id, 0, &response);
 }
 
 void load() {
@@ -100,11 +104,13 @@ void load() {
 	loadConfig();
 
 	ArkApi::GetHooks().SetHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage, &AShooterPlayerController_ClientChatMessage_original);
-	ArkApi::GetCommands().AddConsoleCommand("ChatIcons.Reload", &reloadConfigCmd);
+	ArkApi::GetCommands().AddConsoleCommand("ChatIcons.Reload", &reloadConfigConsoleCmd);
+	ArkApi::GetCommands().AddRconCommand("ChatIcons.Reload", &reloadConfigRconCmd);
 }
 void unload() {
  	ArkApi::GetHooks().DisableHook("AShooterPlayerController.ClientChatMessage", &Hook_AShooterPlayerController_ClientChatMessage);
 	ArkApi::GetCommands().RemoveConsoleCommand("ChatIcons.Reload");
+	ArkApi::GetCommands().RemoveRconCommand("ChatIcons.Reload");
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD event, LPVOID lpReserved) {
