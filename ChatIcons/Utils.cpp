@@ -50,18 +50,7 @@ FString GetTribeRank(AShooterPlayerController* playerController) {
 UTexture2D* loadTexture2D(const std::string path) {
 	auto& plugin = Plugin::Get();
 
-	auto iter = plugin.textureCache.find(path);
-	if (iter != plugin.textureCache.end()) {
-		Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Hit", path.c_str());
-		return iter->second;
-	}
-
-	auto result = reinterpret_cast<UTexture2D*>(Globals::StaticLoadObject(UTexture2D::StaticClass(), nullptr, ArkApi::Tools::ConvertToWideStr(path).c_str(), nullptr, 0, 0, true));
-
-	Log::GetLog()->debug("Utils::loadTexture2D(\"{}\") Texture Cache Miss", path.c_str());
-	// plugin.textureCache.insert(std::pair<std::string, UTexture2D*>(path, result));
-
-	return result;
+	return reinterpret_cast<UTexture2D*>(Globals::StaticLoadObject(UTexture2D::StaticClass(), nullptr, ArkApi::Tools::ConvertToWideStr(path).c_str(), nullptr, 0, 0, true));
 }
 UTexture2D* findIconByPath(const std::string path) {
 	if (path.length() == 0) return NULL;
@@ -72,24 +61,10 @@ UTexture2D* findIconByPath(const std::string path) {
 std::string findIconForMessage(FChatMessage msg) {
 	auto& plugin = Plugin::Get();
 
-	// Log::GetLog()->debug("SenderName: {}", msg.SenderName.ToString());
-	// Log::GetLog()->debug("SenderSteamName: {}", msg.SenderSteamName.ToString());
-	// Log::GetLog()->debug("SenderTribeName: {}", msg.SenderTribeName.ToString());
-	// Log::GetLog()->debug("SenderId: {}", std::to_string(msg.SenderId));
-	// Log::GetLog()->debug("UserId: {}", msg.UserId.ToString());
-	// Log::GetLog()->debug("Message: {}", msg.Message.ToString());
-
-	uint64 steamId;
 	auto senderId = msg.SenderId;
-	Log::GetLog()->debug("senderId={}", std::to_string(senderId));
-	if (!senderId) {
-		steamId = std::stoull(msg.UserId.ToString());
-	}
-	else {
-		steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
-	}
+	if (!senderId) return "";
 
-	Log::GetLog()->debug("steamId={}", std::to_string(steamId));
+	const uint64 steamId = ArkApi::GetApiUtils().GetSteamIDForPlayerID(senderId);
 	if (!steamId) return "";
 
 	AShooterPlayerController* player = ArkApi::GetApiUtils().FindPlayerFromSteamId(steamId);

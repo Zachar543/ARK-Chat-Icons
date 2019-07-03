@@ -45,8 +45,6 @@ void loadConfig() {
 		file >> plugin.config;
 		file.close();
 
-		plugin.textureCache.clear();
-
 		Log::GetLog()->set_level(spdlog::level::info);
 		if (plugin.config.value("Debug", false))
 			Log::GetLog()->set_level(spdlog::level::debug);
