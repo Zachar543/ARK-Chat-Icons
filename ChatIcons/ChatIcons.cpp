@@ -22,7 +22,7 @@
 DECLARE_HOOK(AShooterPlayerController_ClientChatMessage, void, AShooterPlayerController*, FChatMessage);
 void Hook_AShooterPlayerController_ClientChatMessage(AShooterPlayerController* _this, FChatMessage msg) {
 	msg.SenderIcon = findIconByPath(findIconForMessage(msg));
-
+  
 	AShooterPlayerController_ClientChatMessage_original(_this, msg);
 }
 
